@@ -1,0 +1,49 @@
+
+<!-- Including header & footer files -->
+
+<!-- Include Header -->
+    <%- include('include/_header')%>
+<!-- Include /Header -->
+
+ <!-- Main Site -->
+ <main id="site-main">
+    <div class="container">
+        <div class="box-nav d-flex justify-between">
+            <a href="/add-user" class="border-shadow">
+                <span class="text-gradient">New User<i class="fa-solid fa-user"></i></span>
+            </a>
+        </div>
+    
+
+    <!-- Form Handling -->
+    <form action="/" method="post">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Image</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Gender</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                    
+                    <th>Created on</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%- include('include/_show')%>
+            </tbody>
+        </table>
+    </form>
+    <!-- <%= users%> -->
+    <!-- Instead of displaying users , we are going to iterate over the users -->
+    <!-- Add In the show.ejs file -->
+</div>
+
+</main>
+<!-- /Main Site -->
+
+<!-- Include footer -->
+<%- include('include/_footer')%>
+<!-- Include /footer -->

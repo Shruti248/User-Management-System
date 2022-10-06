@@ -1,0 +1,160 @@
+------------------CLIENT SIDE---------------------------------------
+External Modules 
+
+1)Express : Node framework
+2)morgan : Displays a message everytime we make a req(morgan is a Node. js and Express middleware to log HTTP requests and errors, and simplifies the process.)
+3) nodemon : automatically start the server when chnages are made in the mode
+4)ejs : template engine (Allows creating dynamic application)
+5)body-parser : serialize the data & access the form data using body property 
+6)dotenv : Used when we want to seperate our database credentials , & share our source code to others thus they need to create there own database (env)
+7)mongoose : connect to mongodb database
+8)axios : easy to make request in express application
+
+//PROJECT STRUCTURE
+-> In the root directory - include all the assets (css , js , img)
+->include all the HTML Files in Views folder(Default folder of view engine in express)
+-> Server folder : includes services , models , mongodb cnnection & ...
+    - model folder : work on mongodb data , we will perform data validation , processing data , creating mongo scheme & so on...
+    -controller folder : deals with user requests , sources 
+    -database folder : database connecion 
+    -routes folder : create diff routes
+    -services folder
+
+
+
+START
+-> Create http server in server.js (Basic express)
+
+-> config.env : to save env variables
+        ->Import the Module in server.js [const dotenv = require('dotenv');]
+        -> Include path : dotenv.config({path : 'config.env'})
+        -> const PORT = process.env.PORT || 8080; ('ll use the .env file in your local dir else 8080 port will work)
+
+->const morgan = require('morgan');
+->app.use(morgan('tiny'));  // will show request / path : ms(time)
+
+//parse request to body-parser
+app.use(bodyparser.urlencoded({extended:true}))
+
+//Set view engine
+app.set("view engine" , "ejs")  //ejs template engine
+
+//-> This is used only when u have diff folder created for ejs file
+// app.set("views" , path.resolve(__dirname , "views/ejs")) -> views/ejs: path 
+
+//load assets
+app.use("/css" , express.static(path.resolve(__dirname , "assets/css")))
+app.use("/img" , express.static(path.resolve(__dirname , "assets/img")))
+app.use("/js" , express.static(path.resolve(__dirname , "assets/js")))
+
+--> //Views
+
+
+app.get('/', (req , res) => {
+    // res.send("CRUD Application");
+
+    // Loading ejs/html file in the localhost : render()
+    res.render('index'); -> file name 
+})
+
+->Designing html files 
+
+->New User Form 
+
+->Converting HTML in ejs template engine
+
+->After Completion of ejs files , delete the index.html files
+
+---------------------------CLIENT SIDE COMPLETED-----------------------
+
+----------------------SERVER SIDE--------------------------------------
+
+1)ROUTES
+-Seperate routes(3 get methods) from server.js file , & creat a dedicated router file  
+-router.js in router folder(placig all the routes in this)
+-Separting the callback functions in a seperate file under services
+-render.js(Services folder) : Allows us to render diff files using router
+
+2)MONGODB 
+-Using mongodb atlas(cloud storage)
+-create new project , add cluster 
+-database access(Username : admin , pw : admin)
+-network access (for now providing allow access from anywhere , which allows to access from any localhost)
+-Connet the cluster -- connect with application --copy the connection string 
+-config.env : paste the mongodb MONGO_URI & do not forget to enter the pw
+-connection.js(inside database folder) : connecting the db using connecttoDb function
+-Export & import in server.js
+
+3)API
+-model.js(model folder) : 'll create mongodb schema
+-Once the model is created successfully , we will define the controller of the website
+-Using controller : select , update , create , delete records
+-controller.js (Inside controller folder)
+-Including controller in the router.js
+
+------router.js : 
+    // API 
+    route.post('/api/users' , controller.create );
+    route.get('/api/users' , controller.find );
+    route.put('/api/users/:id' , controller.update );
+    route.delete('/api/users/:id' , controller.delete );
+
+
+-------POST REQUEST 
+   
+    //Create func in controller
+    - when you create post request , you need to specify the body using a form  
+
+//CRUD Operations in controller.js
+
+-find : returns all the user 
+-find spcific user : 
+    -new route (We r using same find route for single And multiple user)
+    -new function (So same func)
+
+-Query parameter used 
+
+----------------Using API------------------------------------------
+
+-Now , we will get data from the database & display in the site
+-In the render.js file , instead of only render(index) , we will also pass data ( {users : "New data"} )
+-Access users variable in the  index file
+- <%= users%> : Use this in index.ejs , after the form tag (for try)
+---------this was tryto see if working is fine-------------------
+
+-Using axios module in render.js , so import 
+-Following is the code to get response 
+
+axios.get('http://localhost:5000/api/users')
+        .then(function(response){
+            // console.log(response) -> will show n number of object properties
+            // console.log(response.data) //-> will show only only 
+            res.render('index' , {users : response.data});
+        })
+        .catch(err => {
+            res.send(err);
+        })
+
+-Displaying the response in the show.ejs
+-Update show.ejs file as given
+
+-----------------------Create New User using new user form -----------------------------
+- in add_user.ejs file , we have _form.ejs , go to it
+-Add action attribute in the form (action ="/api/users")
+-in controller while saving the data to the database, we will redirect to the diff url (res.redirect('/add-user))
+-Adding jquery to display message after the data is successfully inserted 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+-Paste this before the closing body tag(footer.ejs)
+-creating index.js(assets - js) & linking it with footer.ejs 
+    ( <script src="/js/index.js"></script>)
+
+    ------------------Update user using update form ---------------
+- Wehn we click on edit , we want all the info of the user in the text boxes displayed already. 
+-So , we need to get user data inside the text boxes & Update
+-render.js (update the code of update_user as shown)
+-see video of crud application for further update & delet 
+-complete update_user in index.js
+
+---------------Delete User---------------
+-show.ejs : user cross button to delete the data
+-we will pass data attribute & get the user id ( data-id="<%= users[i]._id %>")

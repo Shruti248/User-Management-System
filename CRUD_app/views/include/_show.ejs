@@ -1,0 +1,41 @@
+<!-- Iterating over the users -->
+<% for(var i = 0 ;i<users.length ; i++ ) { %>
+    <!-- Only open curly braces , close it in the end -->
+
+<!-- Table Rows -->
+<tr>
+    <!-- <td>1</td>
+    <td>Username</td>
+    <td>example@gmail.com</td>
+    <td>Male</td>
+    <td>Active</td> -->
+
+    <!-- Replacing this hard coded values with variables -->
+    
+    <td><img src="<%= users[i].image%>" width="50"></td>
+
+    <!--  ID--------//i+1 bcoz id starts from 0 -->
+    <td>   <%= i + 1 %>   </td>  
+    <!-- Name -->
+    <td><%= users[i].name %></td>
+    <!-- Email -->
+    <td><%= users[i].email %></td>
+    <!-- Gender -->
+    <td><%= users[i].gender %></td>
+    <!-- Status -->
+    <td><%= users[i].status %></td>
+
+
+    <td>
+        <a href="/update-user?id=<%= users[i]._id %>" class="btn border-shadow update">
+            <span class="text-gradient"><i class="fas fa-pencil-alt"></i></span>
+        </a>
+        <a href="#" class="btn border-shadow delete" data-id="<%= users[i]._id %>">
+            <span class="text-gradient"><i class="fas fa-times"></i></span>
+        </a>
+    </td>
+
+    <td><%= users[i].created %></td>
+</tr>
+
+<% } %>
